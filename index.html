@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizat Sudania</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+        body {
+            font-family: "IBM Plex Sans Arabic", sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .image-container {
+            width: 100%;
+            aspect-ratio: 1/1; /* حجم ثابت */
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: #ccc;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: placeholderShimmer 1.5s infinite;
+        }
+        @keyframes placeholderShimmer {
+            0% {
+                background-color: #e0e0e0;
+            }
+            50% {
+                background-color: #f0f0f0;
+            }
+            100% {
+                background-color: #e0e0e0;
+            }
+        }
+        .question {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 10px;
+            padding: 14px 8px;
+            border-radius: 5px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+        .options li:hover {
+            border: 1px solid gray;
+        }
+        .options input[type="radio"] {
+            display: none;
+        }
+        #alert {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #alert.correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        #alert.wrong {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        #contact-us{
+          text-decoration: none;
+          color: black;
+          background-color: white;
+          padding: 12px;
+          border-radius: 12px;
+          display: flex;
+          gap: 5px;
+          width: 50px;
+          position: fixed;
+          bottom: 12px;
+          left: 20px;
+          box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img id="question-image" alt="Question Image">
+            <div class="placeholder">جاري التحميل...</div>
+        </div>
+        <div class="question" id="question-text"></div>
+        <ul class="options" id="options-list">
+            <!-- سيتم توليد الخيارات هنا -->
+        </ul>
+    </div>
+
+    <div id="alert"></div>
+    <a id="contact-us" href="https://t.me/topz8">
+       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="black"><path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"/></svg>
+    </a>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+      function shuffleAnswers(answers) {
+    for (let i = answers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [answers[i], answers[j]] = [answers[j], answers[i]];
+    }
+    return answers;
+}
+
+const questions = [
+    {
+        image: 'https://i.postimg.cc/x8B6cWpn/23a9534f-062a-4d6b-a876-bcd5954a161d.jpg',
+        question: 'من هو لاعب كرة القدم السوداني الذي حصل على لقب أفضل لاعب في بطولة كأس أمم إفريقيا للمحليين 2011؟',
+        answers: shuffleAnswers([
+            { text: 'سيف تيري', correct: false },
+            { text: 'هيثم مصطفى', correct: true },
+            { text: 'رمضان عجب', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/8zQyDgrb/a1a61cfe-9c24-46ac-bee1-eb2dd5e1dbd5.jpg',
+        question: 'ما هو اسم أول شركة اتصالات تم تأسيسها في السودان؟',
+        answers: shuffleAnswers([
+            { text: 'سوداتل', correct: true },
+            { text: 'زين', correct: false },
+            { text: 'MTN', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/mD9rM98M/9bc0fcea-0cb7-4539-be14-9a76fd2feba0.jpg',
+        question: 'في أي مدينة سودانية يقع متحف السودان القومي؟',
+        answers: shuffleAnswers([
+            { text: 'الخرطوم', correct: true },
+            { text: 'بورتسودان', correct: false },
+            { text: 'كسلا', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/44rCKM9Y/394912e3-c5b1-4566-829c-cadfb433f84a.jpg',
+        question: 'ما هو التطبيق السوداني الذي يستخدم بشكل واسع لطلب خدمات النقل؟',
+        answers: shuffleAnswers([
+            { text: 'ترحال', correct: true },
+            { text: 'أوبر', correct: false },
+            { text: 'كريم', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/Pq69dFHr/22bd56b9-727d-418e-858a-b8d126b3230a.jpg',
+        question: 'أي من هذه المواقع السودانية يعتبر من مواقع التراث العالمي لليونسكو؟',
+        answers: shuffleAnswers([
+            { text: 'جزيرة مروي', correct: true },
+            { text: 'جبل مرة', correct: false },
+            { text: 'وادي هور', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/q78Y3M2q/image.jpg',
+        question: 'أي من هذه المدن السودانية تقع على البحر الأحمر؟',
+        answers: shuffleAnswers([
+            { text: 'بورتسودان', correct: true },
+            { text: 'الأبيض', correct: false },
+            { text: 'سنار', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/MHrrScJP/1723824817611.jpg',
+        question: 'ما هو رمز الإنترنت (النطاق العلوي) للسودان؟ سؤال هدية عديل',
+        answers: shuffleAnswers([
+            { text: '.sd', correct: true },
+            { text: '.su', correct: false },
+            { text: '.ss', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/63WH4V9b/1723824958918.jpg',
+        question: 'أي من هذه الجامعات هي أقدم جامعة في السودان؟',
+        answers: shuffleAnswers([
+            { text: 'جامعة الخرطوم', correct: true },
+            { text: 'جامعة الجزيرة', correct: false },
+            { text: 'جامعة النيلين', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/nV6zH3Vk/cf4edf9d-bc9f-4c57-b2f5-2e4d082e8da0.jpg',
+        question: 'ما هي المدينة السودانية التي تشتهر بصناعة السجاد اليدوي؟',
+        answers: shuffleAnswers([
+            { text: 'كسلا', correct: true },
+            { text: 'دنقلا', correct: false },
+            { text: 'الأبيض', correct: false }
+        ])
+    },
+    {
+        image: 'https://i.postimg.cc/yxfyZ2fk/d5f2bab0-1d35-4a37-9b97-b1dcf140e50f.jpg',
+        question: 'من هو الشاعر السوداني الذي يُلقب بـ"أمير شعراء السودان"؟',
+        answers: shuffleAnswers([
+            { text: 'مـحمد سعيد العباسي', correct: true },
+            { text: 'التيجاني يوسف بشير', correct: false },
+            { text: 'صلاح أحمد إبراهيم', correct: false }
+        ])
+    }
+];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            const image = document.getElementById('question-image');
+            const placeholder = document.querySelector('.placeholder');
+            const questionText = document.getElementById('question-text');
+            const optionsList = document.getElementById('options-list');
+            const alertBox = document.getElementById('alert');
+
+            // تحميل النصوص والخيارات
+            questionText.textContent = question.question;
+            optionsList.innerHTML = '';
+
+            question.answers.forEach((answer) => {
+                const li = document.createElement('li');
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'answer';
+                input.value = answer.correct;
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(answer.text));
+                li.appendChild(label);
+                optionsList.appendChild(li);
+            });
+
+            // تحميل الصورة
+            image.onload = () => {
+                placeholder.style.display = 'none';
+                image.style.display = 'block';
+            };
+            image.src = question.image;
+
+            // إعادة ضبط التنبيه
+            alertBox.style.display = 'none';
+        }
+
+        function handleAnswerSelection() {
+            const optionsList = document.getElementById('options-list');
+            const alertBox = document.getElementById('alert');
+
+            // Remove old event listeners
+            optionsList.removeEventListener('change', handleAnswerChange);
+
+            function handleAnswerChange(event) {
+                const option = event.target;
+                if (option.type === 'radio') {
+                    if (option.value === 'true') {
+                        alertBox.textContent = 'إجابة صحيحة';
+                        alertBox.className = 'correct';
+                        alertBox.style.display = 'block';
+                        setTimeout(() => {
+                            currentQuestionIndex++;
+                            if (currentQuestionIndex < questions.length) {
+                                loadQuestion();
+                            } else {
+                                Swal.fire({
+  title: "تهانينا",
+  text: "كل إجاباتك صحيحة، اعمل سكرين ورسلها لي",
+  icon: "success"
+});
+                            }
+                        }, 3000);
+                    } else {
+                        alertBox.textContent = 'إجابة خاطئة، حـ تبدأ من الأول';
+                        alertBox.className = 'wrong';
+                        alertBox.style.display = 'block';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    }
+                }
+            }
+
+            optionsList.addEventListener('change', handleAnswerChange);
+        }
+
+        // تحميل السؤال الأول عند بداية الصفحة
+        window.onload = () => {
+            loadQuestion();
+            handleAnswerSelection();
+        };
+    </script>
+</body>
+</html>
